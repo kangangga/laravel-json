@@ -25,7 +25,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: patch
           release_branches: main,master
-          tag_prefix: v
+          tag_prefix: 
 
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
