@@ -26,14 +26,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Delete all untagged container versions
-        uses: actions/delete-package-versions@v5
-        with:
-          delete-only-untagged-versions: 'false'
-          min-versions-to-keep: 1
-          package-name: ${{ env.PAKCAGE_NAME }}
-          package-type: container
-
       - name: "Automated Version Bump"
         uses: "phips28/gh-action-bump-version@master"
         with:
