@@ -6,11 +6,6 @@ on:
   pull_request:
     branches: ["main"]
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-  PAKCAGE_NAME: 'kangangga/laravel-json'
-
 concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
