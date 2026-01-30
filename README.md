@@ -1,8 +1,8 @@
 # Laravel JSON Database
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/kangangga/json.svg?style=flat-square)](https://packagist.org/packages/kangangga/json)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kangangga/json/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/kangangga/json/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/kangangga/json.svg?style=flat-square)](https://packagist.org/packages/kangangga/json)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/kangangga/laravel-json.svg?style=flat-square)](https://packagist.org/packages/kangangga/laravel-json)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kangangga/laravel-json/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/kangangga/laravel-json/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/kangangga/laravel-json.svg?style=flat-square)](https://packagist.org/packages/kangangga/laravel-json)
 
 A modern, robust, and feature-rich JSON Database driver for Laravel. Perfect for small applications, prototyping, or hybrid setups where you need the flexibility of NoSQL with the power of Laravel Eloquent.
 
@@ -23,7 +23,7 @@ A modern, robust, and feature-rich JSON Database driver for Laravel. Perfect for
 You can install the package via composer:
 
 ```bash
-composer require kangangga/json
+composer require kangangga/laravel-json
 ```
 
 That's it! The package automatically registers itself and injects the necessary configurations into Laravel.
@@ -52,7 +52,7 @@ If you need to customize storage paths or behavior, you can publish the configur
 php artisan vendor:publish --tag="json-config"
 ```
 
-This will create `config/json.php`. Commonly used options:
+This will create `config/laravel-json.php`. Commonly used options:
 
 ```php
 return [
@@ -80,7 +80,7 @@ use Kangangga\Json\Eloquent\Model;
 
 class Post extends Model
 {
-    // The table name corresponds to the JSON filename (e.g., storage/json/posts.json)
+    // The table name corresponds to the JSON filename (e.g., storage/laravel-json/posts.json)
     protected $table = 'posts';
 
     protected $fillable = ['title', 'content', 'views'];

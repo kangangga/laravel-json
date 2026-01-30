@@ -1,12 +1,21 @@
 {
-    "name": "kangangga/json",
-    "description": "This is my package json",
+    "name": "kangangga/laravel-json",
+    "description": "A robust JSON Database Driver for Laravel with Eloquent ORM, Relationships, Hybrid SQL Support, Queue, and Cache drivers.",
     "keywords": [
-        "kangangga",
         "laravel",
-        "json"
+        "json",
+        "database",
+        "eloquent",
+        "driver",
+        "nosql",
+        "hybrid",
+        "file-based",
+        "orm",
+        "queue",
+        "cache",
+        "persistence"
     ],
-    "homepage": "https://github.com/kangangga/json",
+    "homepage": "https://github.com/kangangga/laravel-json",
     "license": "MIT",
     "authors": [
         {

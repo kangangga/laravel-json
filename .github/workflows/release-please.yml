@@ -1,0 +1,21 @@
+name: release-please
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v4
+        with:
+          # Release type 'php' handles composer.json version bumping automatically
+          release-type: php
+          package-name: kangangga/laravel-json
