@@ -1,21 +1,49 @@
-name: release-please
+name: Build and Push Docker Image
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
-permissions:
-  contents: write
-  pull-requests: write
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  PAKCAGE_NAME: 'kangangga/laravel-json'
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  release-please:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
     steps:
-      - uses: google-github-actions/release-please-action@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Delete all untagged container versions
+        uses: actions/delete-package-versions@v5
         with:
-          # Release type 'php' handles composer.json version bumping automatically
-          release-type: php
-          package-name: kangangga/laravel-json
+          delete-only-untagged-versions: 'false'
+          min-versions-to-keep: 1
+          package-name: ${{ env.PAKCAGE_NAME }}
+          package-type: container
+
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@master"
+        with:
+          tag-prefix: 'v'
+          skip-tag: 'true'
+          skip-commit:  'false'
+          rc-wording:     'RELEASE,alpha'
+          minor-wording:  'add,Adds,new'
+          major-wording:  'MAJOR,cut-major'
+          patch-wording:  'patch,fixes'
+          commit-message: 'update version {{version}}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
