@@ -1,4 +1,5 @@
 {
+    "version": "1.0.0",
     "name": "kangangga/laravel-json",
     "description": "A robust JSON Database Driver for Laravel with Eloquent ORM, Relationships, Hybrid SQL Support, Queue, and Cache drivers.",
     "keywords": [

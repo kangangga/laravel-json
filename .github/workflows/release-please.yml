@@ -39,3 +39,4 @@ jobs:
           commit-message: 'update version {{version}}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_FILENAME: 'composer.json'
