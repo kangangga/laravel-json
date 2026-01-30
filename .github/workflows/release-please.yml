@@ -1,37 +1,52 @@
-name: Build
+name: Auto Release
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+    branches:
+      - main
+      - master
 
-concurrency:
-  group: build-${{ github.ref }}
-  cancel-in-progress: true
+permissions:
+  contents: write
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: "Automated Version Bump"
-        uses: "phips28/gh-action-bump-version@master"
         with:
-          tag-prefix: 'v'
-          skip-tag: 'true'
-          skip-commit:  'false'
-          rc-wording:     'RELEASE,alpha'
-          minor-wording:  'add,Adds,new'
-          major-wording:  'MAJOR,cut-major'
-          patch-wording:  'patch,fixes'
-          commit-message: 'update version {{version}}'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGE_FILENAME: 'composer.json'
+          fetch-depth: 0
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch
+          release_branches: main,master
+          tag_prefix: v
+
+      - name: Update composer.json version
+        if: steps.tag_version.outputs.new_tag != steps.tag_version.outputs.previous_tag
+        run: |
+          NEW_VERSION=${{ steps.tag_version.outputs.new_version }}
+          echo "Updating composer.json to version $NEW_VERSION"
+          
+          # Use jq to update the version field safely
+          jq ".version = \"$NEW_VERSION\"" composer.json > composer.tmp && mv composer.tmp composer.json
+          
+          # Commit the change
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add composer.json
+          git commit -m "chore: bump version to $NEW_VERSION [skip ci]"
+          git push
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          token: ${{ secrets.GITHUB_TOKEN }}
