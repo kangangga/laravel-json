@@ -30,3 +30,8 @@ phpstan.neon
 testbench.yaml
 /docs
 /coverage
+
+# JSON Database Test Files
+/tests/database
+/database/json/*.json
+

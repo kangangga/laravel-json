@@ -1,10 +1,10 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Kangangga\Json\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
-use VendorName\Skeleton\SkeletonServiceProvider;
+use Kangangga\Json\JsonServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -12,26 +12,40 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'VendorName\\Skeleton\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
+        // Setup test database directory
+        $this->app['config']->set('database.connections.json', [
+            'driver' => 'json',
+            'database' => __DIR__ . '/database/json',
+            'prefix' => '',
+        ]);
+
+        // Create test directory
+        if (!file_exists(__DIR__ . '/database/json')) {
+            mkdir(__DIR__ . '/database/json', 0755, true);
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up test files
+        // $files = glob(__DIR__ . '/database/*');
+        // foreach ($files as $file) {
+        //     if (is_file($file)) {
+        //         unlink($file);
+        //     }
+        // }
+        parent::tearDown();
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            SkeletonServiceProvider::class,
+            JsonServiceProvider::class,
         ];
     }
 
-    public function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app)
     {
-        config()->set('database.default', 'testing');
-
-        /*
-         foreach (\Illuminate\Support\Facades\File::allFiles(__DIR__ . '/../database/migrations') as $migration) {
-            (include $migration->getRealPath())->up();
-         }
-         */
+        $app['config']->set('database.default', 'json');
     }
 }
