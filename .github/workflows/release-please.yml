@@ -27,22 +27,6 @@ jobs:
           release_branches: main,master
           tag_prefix: v
 
-      - name: Update composer.json version
-        if: steps.tag_version.outputs.new_tag != steps.tag_version.outputs.previous_tag
-        run: |
-          NEW_VERSION=${{ steps.tag_version.outputs.new_version }}
-          echo "Updating composer.json to version $NEW_VERSION"
-          
-          # Use jq to update the version field safely
-          jq ".version = \"$NEW_VERSION\"" composer.json > composer.tmp && mv composer.tmp composer.json
-          
-          # Commit the change
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add composer.json
-          git commit -m "chore: bump version to $NEW_VERSION [skip ci]"
-          git push
-
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
